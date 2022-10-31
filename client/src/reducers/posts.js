@@ -1,9 +1,13 @@
 const reducer = (state = [], action) => {
-    switch (action.type) {
+    const { type, payload } = action;
+
+    switch (type) {
         case 'FETCH_ALL':
-            return action.payload;
+            return payload;
         case 'CREATE':
-            return state;
+            return [...state, payload ]
+        case 'UPDATE':
+            return state.map(post => post._id == payload._id ? payload : post)
         default:
             return state;
     }
