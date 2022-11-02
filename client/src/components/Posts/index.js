@@ -5,14 +5,14 @@ import useStyles from './styles'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPosts } from '../../api';
 import { getPosts } from '../../actions/posts';
-const Posts = ({setCurrentId}) => {
+const Posts = ({setCurrentId, currentId}) => {
     const dispatch = useDispatch()
     const posts= useSelector((state) => state.posts)
     
     useEffect(()=> {
         dispatch(getPosts())
 
-    },[])
+    },[currentId])
 
         const classes = useStyles();
     return (
