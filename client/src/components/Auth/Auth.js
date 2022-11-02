@@ -5,7 +5,16 @@ import Input from './Input'
 import { GoogleLogin } from 'react-google-login';
 import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
 import Icon from './Icon';
+import  { gapi } from 'gapi-script'
 export const Auth = () => {
+    const googleClientId = "208060749184-8an816ih1gabb8dm2thdvgl2nkgucp5n.apps.googleusercontent.com"
+    gapi.load("client:auth2", () => {
+        gapi.client.init({
+          clientId: googleClientId,
+          plugin_name: "chat",
+        });
+      });
+
     const classes = useStyles();
     const [showPassword, setShowPassword] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
@@ -42,7 +51,7 @@ export const Auth = () => {
                         {isSignUp ? 'Sign Up' : 'Sign In'}
                     </Button>
                     <GoogleLogin
-                        clientId='208060749184-8an816ih1gabb8dm2thdvgl2nkgucp5n.apps.googleusercontent.com'
+                        clientId={googleClientId}
                         render={(renderProps) => (
                             <Button className={classes.googleButton}
                                 color='primary'
