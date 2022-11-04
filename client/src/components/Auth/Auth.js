@@ -30,7 +30,6 @@ export const Auth = () => {
 
     const handleSubmit = (e) => { 
         e.preventDefault()
-        console.log('formData', formData);
 
         if (isSignUp) {
             dispatch(signUp({formData, history}))
@@ -64,7 +63,6 @@ export const Auth = () => {
             console.log('error', error);
         }
 
-        console.log(res)
     }
     const googleFailure = (error) => {
         console.log('error:', error)

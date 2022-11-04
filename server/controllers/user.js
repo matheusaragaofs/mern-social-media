@@ -13,7 +13,7 @@ export const signIn = async (req, res) => {
 
         if (!isPasswordCorrect) return res.status(400).json({ message: 'Invalid credentials'})
 
-        const token = jwt.sign({  id: existingUser._id, email: existingUser.email }, 'test', { expiresIn: "1h"})
+        const token = jwt.sign({  id: existingUser?._id, email: existingUser?.email }, 'test', { expiresIn: "1h"})
 
         res.status(200).json({ result: existingUser, token})
     } catch (error) {
@@ -22,8 +22,8 @@ export const signIn = async (req, res) => {
 }
 
 export const signUp = async (req, res) => {
+
     const { email, password, confirmPassword, firstName, lastName } = req.body
-    console.log('req.body', req.body);
 
     try {
         const existingUser = await User.findOne({ email })
