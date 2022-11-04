@@ -12,14 +12,13 @@ import { useDispatch } from 'react-redux'
 import { deletePost, likePost } from '../../../actions/posts';
 
 const Post = ({post, setCurrentId}) => {
-    console.log(post?.tags)
     const dispatch = useDispatch()
     const classes = useStyles();
     return (
         <Card className={classes.card}>
             <CardMedia className={classes.media} image={post.selectedFile} title={post.title}/>
             <div className={classes.overlay}>
-                 <Typography variant='h6'>{post.creator}</Typography>
+                 <Typography variant='h6'>{post.name}</Typography>
                  <Typography variant='body2'>{moment(post.CreatedAt).fromNow()}</Typography>
             </div>
             <div className={classes.overlay2}>
