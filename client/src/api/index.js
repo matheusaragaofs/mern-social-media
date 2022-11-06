@@ -8,8 +8,13 @@ API.interceptors.request.use((req) => {
     return req;
 })
 
-export const fetchPosts = async () => API.get('/posts')
-export const fetchPostsBySearch = async (searchQuery) => API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`)
+export const fetchPosts = async (page) => API.get('/posts', { params: { page }})
+export const fetchPost = async (id) => API.get(`/posts/${id}`)
+// export const fetchPostsBySearch = async (searchQuery) => API.get(`/posts/search?searchQuery=${searchQuery.search || ''}&tags=${searchQuery.tags}`)
+export const fetchPostsBySearch = async (searchQuery) => API.get(`/posts/search`, {params: {
+    search: searchQuery.search,
+    tags: searchQuery.tags
+}})
 
 export const createPpost = (newPost) => API.post('/posts', newPost);
 export const updatePost = (id, updatedPost) => API.patch(`${'/posts'}/${id}`, updatedPost)

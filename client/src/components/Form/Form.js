@@ -10,7 +10,7 @@ const Form = ({ currentId, setCurrentId }) => {
     const dispatch = useDispatch()
     const initialPostData = { title: '', message: '', tags: '', selectedFile: '' }
     const [postData, setPostData] = useState(initialPostData)
-    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null)
+    const post = useSelector(({ posts: { posts } }) => currentId ? posts.find((p) => p._id === currentId) : null)
     const user = JSON.parse(localStorage.getItem('profile'))
     useEffect(() => {
         if (post) setPostData(post);
@@ -21,14 +21,14 @@ const Form = ({ currentId, setCurrentId }) => {
     const clear = () => {
         setCurrentId(null)
         setPostData(initialPostData)
-}
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         if (currentId) {
             dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }))
         } else {
-            dispatch(createPost({...postData, name: user?.result?.name }))
+            dispatch(createPost({ ...postData, name: user?.result?.name }))
         }
         clear()
     }
@@ -42,7 +42,7 @@ const Form = ({ currentId, setCurrentId }) => {
     }
 
     return (
-        <Paper className={classes.paper}>
+        <Paper className={classes.paper} elevation={6}>
             <form autoComplete='off' noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant='h6'>
                     {currentId ? 'Editing' : 'Creating'} a Memory

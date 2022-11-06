@@ -1,21 +1,40 @@
 import * as api from '../api';
-import { FETCH_ALL, CREATE, DELETE, LIKE, UPDATE } from '../constants/actionTypes'
+import { FETCH_ALL, CREATE, DELETE, LIKE, UPDATE, FETCH_BY_SEARCH, START_LOADING, END_LOADING , FETCH_POST} from '../constants/actionTypes'
 //Action Creators
-export const getPosts = () => async (dispatch) => {
+export const getPosts = (page) => async (dispatch) => {
+    console.log('getPosts => page', page)
     try {
-        const { data } = await api.fetchPosts()
-        const action = { type: FETCH_ALL, payload: data }
-        dispatch(action)
+        dispatch({type: START_LOADING})
+        const { data } = await api.fetchPosts(page)
+        console.log('data:', data)
+        dispatch({ type: FETCH_ALL, payload: data })
+        dispatch({type: END_LOADING})
     } catch (error) {
         console.log(`[ERROR]: getPosts() -> ${error}`)
     }
 
+}
+export const getPost = (id) => async (dispatch) => {
+    try {
+        dispatch({type: START_LOADING})
+        const { data } = await api.fetchPost(id)
+        console.log('data:', data)
+        dispatch({ type: FETCH_POST, payload: data })
+        dispatch({type: END_LOADING})
+    } catch (error) {
+        console.log(`[ERROR]: getPosts() -> ${error}`)
+    }
 
 }
+
 export const getPostsBySearch = (searchQuery) => async (dispatch) => {
+    console.log('getPostsBySearch ENTROU:')
     try {
+        dispatch({type: START_LOADING})
         const { data } = await api.fetchPostsBySearch(searchQuery)
-        console.log('data:', data)
+        dispatch({type: FETCH_BY_SEARCH, payload: data})
+        dispatch({type: END_LOADING})
+
     } catch (error) {
         console.log('error:', error)
     }
@@ -23,11 +42,14 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
 
 export const createPost = (post) => async (dispatch) => {
     try {
+        dispatch({type: START_LOADING})
         const { data } = await api.createPpost(post)
         dispatch({
             type: CREATE,
             payload: data
         })
+        dispatch({type: END_LOADING})
+
     } catch (error) {
         console.log(`[ERROR]: createPost() -> ${error}`)
     }

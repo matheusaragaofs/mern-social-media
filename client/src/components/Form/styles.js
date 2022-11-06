@@ -15,6 +15,7 @@ export default makeStyles((theme) => ({
     justifyContent: 'center',
   },
   fileInput: {
+    overflow:'scroll',
     width: '97%',
     margin: '10px 0',
   },
