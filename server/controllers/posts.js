@@ -33,8 +33,7 @@ export const getPost = async (req, res) => {
 
 export const getPostsBySearch = async (req, res) => {
     const { search, tags } = req.query;
-    console.log('req.query:', req.query)
-    const searchParamsLength = Object.entries(req.query).filter((item) => item[1] !== '').length
+    const searchParamsLength = Object.entries(req.query).filter(([key, value]) => value !== '').length
     try {
         const title = new RegExp(search, 'i') // Test or TEST or test  => test
         const posts = await PostMessage.find({
@@ -56,9 +55,10 @@ export const getPostsBySearch = async (req, res) => {
 export const createPost = async (req, res) => {
     const post = req.body
     const newPost = await PostMessage.create(post)
+    const _id = newPost._id
     try {
         await newPost.save()
-        res.status(201).json({ ...post, creator: req.userId, createdAt: new Date().toISOString() })
+        res.status(201).json({ ...post, creator: req.userId, createdAt: new Date().toISOString(), _id })
     } catch (error) {
         res.status(409).json({
             message: error.message

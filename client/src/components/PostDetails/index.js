@@ -11,7 +11,7 @@ import { getPost, getPostsBySearch } from '../../actions/posts'
 
 const PostDetails = () => {
   const dispatch = useDispatch()
-  const { post, posts, isLoading } = useSelector((state) => state.posts)
+  const { post, posts = [], isLoading } = useSelector((state) => state.posts)
   const history = useHistory()
   const classes = useStyles()
   const { id } = useParams()
@@ -20,19 +20,21 @@ const PostDetails = () => {
     dispatch(getPost(id))
   }, [id])
 
-  // useEffect(() => {
-  //   if (post) {
-  //     dispatch(getPostsBySearch({ search: 'none', tags: post?.tags.join(',') }))
-  //   }
-  // }, [post])
+  useEffect(() => {
+    if (post) {
+      dispatch(getPostsBySearch({ search: '', tags: post?.tags.join(',') }))
+    }
+  }, [post])
 
-
+  const openPost = (id) => {
+    history.push(`/posts/${id}`)
+  }
 
   if (!post) return null
-  
-  // const recommendedPosts = posts.filter(({ _id }) => _id !== post._id)
-
-
+  console.log('posts:', posts)
+  let parsedPosts = posts?.length > 1 ? posts : [posts];
+  const recommendedPosts = parsedPosts?.filter(({ _id }) => _id !== post._id)
+  console.log('recommendedPosts:', recommendedPosts)
   if (isLoading) {
     return <Paper elevation={6} className={classes.loadingPaper}>
       <CircularProgress size='7em' />
@@ -58,18 +60,27 @@ const PostDetails = () => {
           <img className={classes.media} src={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={post.title} />
         </div>
       </div >
-      {/* {recommendedPosts.length && (
+      {recommendedPosts?.length && (
         <div className={classes.section}>
-          <Typography  gutterBottom variant="h5">You might also like</Typography>
-            <Divider/>
-            <div className={classes.recommendedPosts}>
-              {recommendedPosts?.map(({title, message, namem, likes, selectedFile, _id}) => (
-                {title}
-              ))}
-            </div>
+          <Typography gutterBottom variant="h5">You might also like</Typography>
+          <Divider />
+          <div className={classes.recommendedPosts}>
+            {recommendedPosts?.map(({ title, name, message, likes, selectedFile, _id }) => (
+              <div style={{ margin: '20px', cursor: 'pointer' }}
+                onClick={() => openPost(_id)}
+                key={_id}>
+                <Typography gutterBottom variant='h6'>{title}</Typography>
+                <Typography gutterBottom variant='subtitle2'>{name}</Typography>
+                <Typography gutterBottom variant='subtitle2'>{message || 'No description'}</Typography>
+                <Typography gutterBottom variant='subtitle1'>Likes:{likes?.length}</Typography>
+                <img width="200px" src={selectedFile} />
+              </div>
+            ))}
+          </div>
         </div>
-      )} */}
-    </Paper>
+      )
+      }
+    </Paper >
   )
 }
 

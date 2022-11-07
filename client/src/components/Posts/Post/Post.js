@@ -37,7 +37,7 @@ const Post = ({ post, setCurrentId }) => {
         <Card className={classes.card} raised elevation={6} >
             <CardMedia className={classes.media} image={post.selectedFile} title={post.title} />
             <div className={classes.overlay}>
-                <Typography variant='h6'>{post.name}</Typography>
+                <Typography variant='body1'>{post.name}</Typography>
                 <Typography variant='body2'>{moment(post.CreatedAt).fromNow()}</Typography>
             </div>
             {user?.result?.googleId === post?.creator || user?.result?._id === post?.creator && (
@@ -50,26 +50,32 @@ const Post = ({ post, setCurrentId }) => {
                 </div>
             )}
 
-
-            <div className={classes.details}>
-                <Typography variant='body2' color='textSecondary'>{post?.tags?.map((tag) => `#${tag} `)}</Typography>
-            </div>
-            <Typography className={classes.title} onClick={openPost} variant='h5' gutterBottom >{post.title}</Typography>
-            <CardContent>
-                <Typography variant='body2' color='textSecondary' component='p' >{post.message}</Typography>
-            </CardContent>
-            <CardActions className={classes.cardActions}>
-                <Button disabled={!user?.result} size='small' color='primary' onClick={() => { dispatch(likePost(post._id)) }}>
-                    <Likes />
-                </Button>
-                {user?.result?.googleId === post?.creator || user?.result?._id === post?.creator && (
-                    <Button size='small' color='primary' onClick={() => { dispatch(deletePost(post._id)) }}>
-                        <DeleteIcon fontSize='small' />
-                        Delete
+            <div style={{ cursor: 'pointer' }} onClick={openPost}>
+                <div className={classes.details}>
+                    <Typography variant='body2' color='textSecondary'>{post?.tags?.map((tag) => `#${tag} `)}</Typography>
+                </div>
+                <Typography className={classes.title} variant='h5' gutterBottom >{post.title}</Typography>
+                <CardContent>
+                    <Typography variant='body2' color='textSecondary' component='p' >{post.message}</Typography>
+                </CardContent>
+                <CardActions className={classes.cardActions}>
+                    <Button disabled={!user?.result} size='small' color='primary' onClick={(e) => {
+                        e.stopPropagation()
+                        dispatch(likePost(post._id))
+                    }}>
+                        <Likes />
                     </Button>
+                    {user?.result?.googleId === post?.creator || user?.result?._id === post?.creator && (
+                        <Button size='small' color='primary' onClick={(e) => {
+                            e.stopPropagation()
+                            dispatch(deletePost(post._id)) }}>
+                            <DeleteIcon fontSize='small' />
+                            Delete
+                        </Button>
 
-                )}
-            </CardActions>
+                    )}
+                </CardActions>
+            </div>
         </Card>
     )
 }
