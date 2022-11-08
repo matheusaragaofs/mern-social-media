@@ -5,7 +5,7 @@ import moment from 'moment'
 import { useParams, useHistory } from 'react-router-dom'
 import useStyles from './styles'
 import { getPost, getPostsBySearch } from '../../actions/posts'
-
+import CommentsSection from './CommentsSection'
 
 
 
@@ -34,7 +34,6 @@ const PostDetails = () => {
   console.log('posts:', posts)
   let parsedPosts = posts?.length > 1 ? posts : [posts];
   const recommendedPosts = parsedPosts?.filter(({ _id }) => _id !== post._id)
-  console.log('recommendedPosts:', recommendedPosts)
   if (isLoading) {
     return <Paper elevation={6} className={classes.loadingPaper}>
       <CircularProgress size='7em' />
@@ -53,7 +52,7 @@ const PostDetails = () => {
           <Divider style={{ margin: '20px 0' }} />
           <Typography variant="body1"><strong>Realtime Chat - coming soon!</strong></Typography>
           <Divider style={{ margin: '20px 0' }} />
-          <Typography variant="body1"><strong>Comments - coming soon!</strong></Typography>
+          <CommentsSection post={post}/>
           <Divider style={{ margin: '20px 0' }} />
         </div>
         <div className={classes.imageSection}>
